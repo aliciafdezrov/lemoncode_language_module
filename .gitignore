@@ -1,0 +1,5 @@
+.idea/
+node_modules/
+transpiled/
+.cache/
+.DS_Store
