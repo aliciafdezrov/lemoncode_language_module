@@ -24,8 +24,7 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "lite-server": "^2.5.4",
-    "lodash": "^4.17.15"
+    "lite-server": "^2.5.4"
   },
   "peerDependencies": {},
   "devDependencies": {
