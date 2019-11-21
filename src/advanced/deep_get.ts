@@ -37,7 +37,12 @@ const myEmptyObject = {};
 
 
 const deepSet = (() => {
-    const innerDeepSet = (value, obj, propsHierarchy, index) => {
+    const innerDeepSet = (value: number, obj: object = {}, propsHierarchy: Array<string> = [], index: number) => {
+        if (index === propsHierarchy.length) return  obj;
+        else if (index === propsHierarchy.length-1) {
+            obj[propsHierarchy[index]] = value;
+            return obj;
+        } else return obj[propsHierarchy[index]] = innerDeepSet(value, obj[propsHierarchy[index]], propsHierarchy, index+1);
     };
 
     return (value, myObject, ...propsHierarchy) => innerDeepSet(value, myObject, propsHierarchy, 0);
