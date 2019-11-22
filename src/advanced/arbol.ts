@@ -2,36 +2,77 @@ console.group("ADVANCED 3. ÁRBOL");
 
 interface TreeNode {
     name: string;
-    parentNode?: TreeNode;
+    childNodes?: Array<TreeNode>;
+}
+
+interface Tree {
+    rootNode: TreeNode;
+}
+
+interface TreeAPI {
+    addTreeNode: (name: string, parent?: string) => void;
+    printTree: () => void;
+    recursiveSearchOfNode: (node: string) => TreeNode;
+}
+
+const treeNodeBuilder = (): TreeAPI => {
+    const tree: Tree = {rootNode: undefined};
+
+    return {
+        addTreeNode: function (name: string, parent?: string): void {
+            let newNode: TreeNode = {name};
+
+            if (parent === undefined) tree.rootNode = newNode;
+            else {
+                const parentNode: TreeNode = this.recursiveSearchOfNode(parent);
+                if (parentNode.childNodes !== undefined) parentNode.childNodes.push(newNode);
+                else parentNode.childNodes = new Array<TreeNode>(newNode);
+            }
+        },
+
+        printTree: function (): void {
+            console.log(tree);
+        },
+
+        recursiveSearchOfNode: (function () {
+
+            const innerSearchNode = (nodeToSearch: string, nodesArray?: Array<TreeNode>, index?: number): TreeNode => {
+                if (nodesArray[index].name === nodeToSearch) return nodesArray[index];
+                else if (index !== nodesArray.length - 1) return innerSearchNode(nodeToSearch, nodesArray, index + 1);
+                else {
+                    for (let node of nodesArray) {
+                        return innerSearchNode(nodeToSearch, node.childNodes, 0);
+                    }
+                }
+            };
+
+            return (node: string) => innerSearchNode(node, [tree.rootNode], 0);
+        })()
+    }
 };
 
-const root = {
-    name: "0"
-};
+const treeBuilder: TreeAPI = treeNodeBuilder();
+treeBuilder.addTreeNode("root");
+treeBuilder.addTreeNode("child1", "root");
+treeBuilder.addTreeNode("child2", "root");
+treeBuilder.addTreeNode("child3", "child1");
+treeBuilder.addTreeNode("child4", "child1");
+treeBuilder.addTreeNode("child5", "child2");
+treeBuilder.addTreeNode("child6", "child3");
+console.log("La estructura esperada es: ");
+console.log(`             
+                            | child3    | child6
+                 | child1   
+                 |          | child4
+                 |                 
+                 |        
+            root |
+                 |
+                 |
+                 |
+                 |          
+                 | child2   | child 5
+                 `);
 
-const child1 = {
-    name: "1",
-    parentNode: root
-};
-
-const child2 = {
-    name: "2",
-    parentNode: root
-};
-
-const child3 = {
-    name: "3",
-    parentNode: child1
-};
-
-const child4 = {
-    name: "4",
-    parentNode: child1
-};
-
-const child5 = {
-    name: "5",
-    parentNode: child1
-};
-
+treeBuilder.printTree();
 console.groupEnd();
