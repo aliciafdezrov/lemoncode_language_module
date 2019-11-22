@@ -1,4 +1,4 @@
-console.log("----> 2. CONCAT");
+console.group("2. CONCAT");
 
 const array1: Array<number> = [1,5,3,1,2,1,0];
 const array2: Array<string> = ["a", "b", "c", "d", "e", "f", "g"];
@@ -16,3 +16,5 @@ const array4: Array<string> = ["h", "i", "j", "k", "l", "m"];
 const concatMorethanTwo = <T>(...args: Array<T>): Array<T> => [...args];
 
 console.log("The result of four concatenated arrays is: ", concatMorethanTwo<string|number>(...array1, ...array2, ...array3, ...array4));
+
+console.groupEnd();

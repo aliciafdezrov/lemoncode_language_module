@@ -1,6 +1,8 @@
-console.log("----> 1. APLANANDO ARRAYS");
+console.group("ADVANCED 1. APLANANDO ARRAYS");
 
 const sample = [1, [2, 3], [[4], [5, 6, [7, 8, [9]]]]];
+
+console.log("The original array is: ", sample);
 
 const recursiveFlattenArray = (() => {
     const flatArray = [];
@@ -15,4 +17,6 @@ const recursiveFlattenArray = (() => {
     return (array) => innerFlattenArray(array);
 })();
 
-console.log(recursiveFlattenArray(sample));
+console.log("The flatten array is: ", recursiveFlattenArray(sample));
+
+console.groupEnd();

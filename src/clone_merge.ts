@@ -1,6 +1,8 @@
-console.log("----> 3. CLONE MERGE");
+console.group("3. CLONE MERGE");
 
-console.log("Exercise 1: Clone");
+console.log("%c Exercise 1: Clone", "color:green");
+
+console.group("Simple Clone");
 
 let obj1: object = {
     name: "Corsa",
@@ -20,7 +22,9 @@ let copyOfObject1: object = clone(obj1);
 console.log("The copy of the object is: ", copyOfObject1);
 console.log("The two objects are the same: ", copyOfObject1 === obj1);
 console.log("...but the copy has the same properties as the original: ", copyOfObject1["name"] === obj1["name"]);
+console.groupEnd();
 
+console.group("Deep Clone");
 const deepClone = (() => {
     const innerDeepClone = (source: object) => {
         let copy = {};
@@ -51,10 +55,11 @@ console.log(deepObjectClone);
 
 console.log("The copy of the deep object is: ", deepObjectClone);
 console.log("The two objects are the same: ", deepObjectClone === deepObject);
-console.log("...but the copy has the same properties as the original: ", copyOfObject1["a"] === obj1["a"]);
+console.log("...but the copy properties has are equal to the original properties: ", copyOfObject1["a"] === obj1["a"]);
 console.log("...if the property is an object are NOT the same: ", deepObject["b"] === deepObjectClone["b"]);
+console.groupEnd();
 
-console.log("Exercise 2: Merge");
+console.log("%c Exercise 2: Merge", "color: green");
 
 const a: object = {name: "Maria", surname: "Ibañez", country: "SPA"};
 const b: object = {name: "Luisa", age: 31, married: true};
@@ -67,3 +72,5 @@ function merge(source: object, target: object): object {
 }
 
 console.log("The result of the merge of a and b objects is: ", merge(a, b));
+
+console.groupEnd();

@@ -1,4 +1,4 @@
-console.log("----> 4. TRAZAS POR CONSOLA");
+console.group("ADVANCED 4. TRAZAS POR CONSOLA");
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 const showMessage = async ([time, message]) => {
@@ -19,3 +19,5 @@ const run = triggers => {
     });
 };
 run(triggers);
+
+console.groupEnd();

@@ -1,5 +1,5 @@
-console.log("----> 2. ACCESO EN PROFUNDIDAD");
-console.log("APARTADO A");
+console.group("ADVANCED 2. ACCESO EN PROFUNDIDAD");
+console.log("%c APARTADO A", "color: green");
 
 const myObject = {
     a: 1,
@@ -31,7 +31,7 @@ console.log(deepGet(myObject, "b", "d", "f", "g")); // bingo
 console.log(deepGet(myObject));  // {a: 1, b: {...}}
 
 
-console.log("APARTADO B");
+console.log("%c APARTADO B", "color: green");
 
 const myEmptyObject = {};
 
@@ -56,3 +56,5 @@ deepSet(3, myEmptyObject, "a");
 console.log(JSON.stringify(myEmptyObject));  // {a: 3}
 deepSet(4, myEmptyObject);
 console.log(JSON.stringify(myEmptyObject));  // Do nothing // {a: 3}
+
+console.groupEnd();

@@ -1,4 +1,4 @@
-console.log("----> 5. SLOT MACHINE");
+console.group("5. SLOT MACHINE");
 
 class SlothMachine {
     private coinsCount: number;
@@ -32,3 +32,5 @@ machine1.play();
 machine1.play();
 machine1.play();
 machine1.play();
+
+console.groupEnd();

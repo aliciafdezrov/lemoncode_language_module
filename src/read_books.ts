@@ -1,4 +1,4 @@
-console.log("----> 4. READ BOOKS");
+console.group("4. READ BOOKS");
 
 interface Book {
     title: string;
@@ -19,3 +19,5 @@ function isBookRead(books: Array<Book>, titleToSearch: string): boolean {
 console.log("Is Devastación read? ", isBookRead(books, "Devastación"));
 console.log("Is Canción de hielo y fuego read? ", isBookRead(books, "Canción de hielo y fuego"));
 console.log("Is Los Pilares de la Tierra read? ", isBookRead(books, "Los Pilares de la Tierra"));
+
+console.groupEnd();

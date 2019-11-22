@@ -1,11 +1,10 @@
-console.log("----> 5. MEMOIZACIÓN");
-
 const expensiveFunction = () => {
     console.log("Una única llamada");
     return 3.1415;
 };
 
-console.log("APARTADO A: ");
+console.group("ADVANCED 5. MEMOIZACIÓN");
+console.log("%c APARTADO A: ", 'color: green');
 
 const memoize = (func: () => any) => {
     const cache = new WeakMap();
@@ -27,15 +26,11 @@ console.log(memoized()); // Una única llamada // 3.1415
 console.log(memoized()); // 3.1415
 console.log(memoized()); // 3.1415
 
-console.log("APARTADO B: ");
-
-interface FuncType {
-    name: string;
-}
+console.log("%c APARTADO B: ", 'color: green');
 
 const cacheAPI = (func: () => any) => {
     const cache = new WeakMap();
-    const key: FuncType = {name};
+    const key = {name};
 
     return {
         setCache: function () {
@@ -50,70 +45,80 @@ const cacheAPI = (func: () => any) => {
     }
 };
 
-const memoizeInOneLine = (func: () => any, cache = cacheAPI(func)) => () => cache.getCacheItem() !== undefined ? cache.getCacheItem() : cache.setCache();
+const memoizeInOneLine = (func, cache = cacheAPI(func)) => () => cache.getCacheItem() !== undefined ? cache.getCacheItem() : cache.setCache();
 
 const memoizedInOneLine = memoizeInOneLine(expensiveFunction);
 console.log(memoizedInOneLine());
 console.log(memoizedInOneLine());
 console.log(memoizedInOneLine());
 
-console.log("APARTADO C");
+console.log("%c APARTADO C: ", 'color: green');
 
 let count = 0; // Comprobacion de no de ejecuciones
 const repeatText = (repetitions: number, text: string): string => (count++, `${text} `.repeat(repetitions).trim());
 
-interface FuncTypeWithArguments {
+interface KeyWithArguments {
     name: string;
-    arguments: Array<any>;
+    arguments: Array<string | number | boolean>;
 }
 
-const keyAPI = () => {
-    const key: FuncTypeWithArguments = {
-        name: null,
-        arguments: null
-    };
+interface KeyAPI {
+    getKey: () => KeyWithArguments;
+    setKeyName: (name: string) => void;
+    setKeyArgs: (args: Array<number | string | boolean>) => void;
+}
+
+const keyAPI = (): KeyAPI => {
+    const key: KeyWithArguments = {name: "", arguments: []};
 
     return {
-        getKey: function () {
+        getKey: function <T>(): KeyWithArguments {
             return key;
         },
 
-        setKeyName: function (name: string) {
+        setKeyName: function (name: string): void {
             key.name = name;
         },
 
-        setKeyArgs: function (args: Array<any>) {
+        setKeyArgs: function (args: Array<number | string | boolean>): void {
             key.arguments = args;
         }
     }
 };
 
-const cacheAPI2 = (func) => {
-    const cache = new Map();
+interface CacheAPI<T> {
+    setCache: (key: KeyWithArguments) => T;
+    getValueFromCache: (key: KeyWithArguments) => Array<number | string | boolean>;
+    hasCacheThisItem: (key: KeyWithArguments) => KeyWithArguments;
+}
+
+const cacheAPI2 = <T>(func: (args?) => T): CacheAPI<T> => {
+    const cache: Map<KeyWithArguments, T> = new Map<KeyWithArguments, T>();
 
     return {
-        setCache: function (key) {
-            let value = func(...key.getKey().arguments);
-            cache.set(key.getKey(), value);
-            return value;
+        setCache: function <T>(key: KeyWithArguments): T {
+            let value = func(...key.arguments);
+            cache.set(key, value);
+            return this.getValueFromCache(key);
         },
 
-        getItemFromCache: function(key) {
-          return cache.get(key);
+        getValueFromCache: function<T>(key: KeyWithArguments): T {
+            return cache.get(key) as any;
         },
 
-        hasCacheThisItem: function (key) {
-            let cacheItem = null;
+        hasCacheThisItem: function (key: KeyWithArguments): KeyWithArguments {
+            let cacheItem: KeyWithArguments = null;
 
             if (cache.size) {
                 cache.forEach((value, key1) => {
-                    if (key1.name === key.getKey().name && key.getKey().arguments.length === key1.arguments.length) {
-                        let elementsAreEqual = true;
-                        for(let i = 0; i < key1.arguments.length && elementsAreEqual; i++) {
-                            if (key.getKey().arguments[i] !== key1.arguments[i]) elementsAreEqual = false;
+                    if (key1.name === key.name && key.arguments.length === key1.arguments.length) {
+                        let elementsAreEqual: boolean = true;
+
+                        for (let i: number = 0; i < key1.arguments.length && elementsAreEqual; i++) {
+                            if (key.arguments[i] !== key1.arguments[i]) elementsAreEqual = false;
                         }
 
-                        if(elementsAreEqual) cacheItem = key1;
+                        if (elementsAreEqual) cacheItem = key1;
                     }
                 });
             }
@@ -122,16 +127,15 @@ const cacheAPI2 = (func) => {
     }
 };
 
-const memoizeWithArgs = (func) => {
-    const cache = cacheAPI2(func);
-    const keys = Array<FuncTypeWithArguments>();
+const memoizeWithArgs = <T>(func) => {
+    const cache: CacheAPI<T> = cacheAPI2(func);
 
-    return (...args) => {
-        const key = keyAPI();
+    return <T>(...args) => {
+        const key: KeyAPI = keyAPI();
         key.setKeyName(func.name);
         key.setKeyArgs(args);
-        let itemFromCache = cache.hasCacheThisItem(key);
-        return itemFromCache !== null ? cache.getItemFromCache(itemFromCache) : cache.setCache(key);
+        let itemFromCache = cache.hasCacheThisItem(key.getKey());
+        return itemFromCache !== null ? cache.getValueFromCache(itemFromCache) : cache.setCache(key.getKey());
     };
 };
 
@@ -140,5 +144,7 @@ console.log(memoizedGreet(1, "pam"));   // pam
 console.log(memoizedGreet(3, "chun"));  // chun chun chun
 console.log(memoizedGreet(1, "pam"));   // pam
 console.log(memoizedGreet(3, "chun"));  // chun chun chun
-console.log(count);                     // 2
+console.log(count);                          // 2
+
+console.groupEnd();
 
