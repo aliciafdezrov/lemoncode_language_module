@@ -22,10 +22,10 @@ const treeNodeBuilder = (): TreeAPI => {
         addTreeNode: function (name: string, parent?: string): void {
             let newNode: TreeNode = {name};
 
-            if (parent === undefined) tree.rootNode = newNode;
+            if (!parent) tree.rootNode = newNode;
             else {
                 const parentNode: TreeNode = this.recursiveSearchOfNode(parent);
-                if (parentNode.childNodes !== undefined) parentNode.childNodes.push(newNode);
+                if (parentNode.childNodes) parentNode.childNodes.push(newNode);
                 else parentNode.childNodes = new Array<TreeNode>(newNode);
             }
         },
