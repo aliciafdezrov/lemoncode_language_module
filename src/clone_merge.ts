@@ -55,8 +55,8 @@ console.log(deepObjectClone);
 
 console.log("The copy of the deep object is: ", deepObjectClone);
 console.log("The two objects are the same: ", deepObjectClone === deepObject);
-console.log("...but the copy properties has are equal to the original properties: ", copyOfObject1["a"] === obj1["a"]);
-console.log("...if the property is an object are NOT the same: ", deepObject["b"] === deepObjectClone["b"]);
+console.log("...but the properties of the copy are equal to the original properties: ", copyOfObject1["a"] === obj1["a"]);
+console.log("...if the property is an object, the property of the copy is the same object: ", deepObject["b"] === deepObjectClone["b"]);
 console.groupEnd();
 
 console.log("%c Exercise 2: Merge", "color: green");
